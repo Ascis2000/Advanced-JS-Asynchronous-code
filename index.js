@@ -125,7 +125,8 @@ el perfil de usuario de github a partir de su nombre de usuario.
 */
 function getGitHubUserProfile(username) {
 
-    const url = `https://api.github.com/users/${username}`;
+    //const url = `https://api.github.com/users/${username}`;
+    const url = `./json/${username}.json`;
 
     let resultado = fetch(url)
         .then(response => response.json())
@@ -153,10 +154,12 @@ como argumento el nombre de un usuario (username), retorne
 {img, name} y pinte la foto y el nombre en el DOM.
 */
 function printGithubUserProfile(username) {
-    const url = `https://api.github.com/users/${username}`;
 
-    let resultado = fetch(url)
-        .then(response => response.json())
+    //const url = `https://api.github.com/users/${username}`;
+    const url = `./json/${username}.json`;
+
+    // utilizamos la funcion anterior para recuperar el usuario y solamente
+    let resultado = getGitHubUserProfile('alenriquez96')
         .then(data => {
             // obtenemos los valores de data.name y data.avatar_url
             let name = data.name;
@@ -183,7 +186,6 @@ printGithubUserProfile('alenriquez96').then(perfil => {
 
     // añadimos los elementos en el DOM
     const container = document.getElementById('ejercicio_6');
-    container.innerHTML = '';
     container.appendChild(imgElement);
     container.appendChild(nameElement);
     console.log("****************");
@@ -202,7 +204,9 @@ debe ser exactamente la misma:
 </section>
 */
 function getAndPrintGitHubUserProfile(username) {
-    const url = `https://api.github.com/users/${username}`;
+
+    const url = `./json/${username}.json`;
+    //const url = `https://api.github.com/users/${username}`;
 
     let resultado = fetch(url)
         .then(response => {
@@ -250,20 +254,21 @@ El usuario escribirá en el input el nombre de usuario de GitHub que quiera busc
 Después llamaremos a la función getAndPrintGitHubUserProfile(username) que se 
 ejecute cuando se pulse el botón buscar.(Esto no se testea)
 */
+// Ejemplos: 'octocat', 'alenriquez96', 'alejandroereyesb'
 document.getElementById('btn_buscarUsuario').addEventListener('click', function() {
     const userValue = document.getElementById('usuario').value.trim();
 
     // validamos que el campo 'usuario' no este vacio
     if (userValue != "") {
-        getAndPrintGitHubUserProfile(userValue).then(datosUsuario => {
-            console.log("Ejercicio 8");
+        getAndPrintGitHubUserProfile(userValue)
+            .then(datosUsuario => {
+                console.log("Ejercicio 8");
         
-            // añadimos el reasultado al DOM
-            const container = document.getElementById('ejercicio_8');
-            container.innerHTML = datosUsuario;
-            console.log("****************");
+                // añadimos el reasultado al DOM
+                const container = document.getElementById('ejercicio_8');
+                container.innerHTML = datosUsuario;
+                console.log("****************");
         });
-
     } else {
         document.getElementById('ejercicio_8').innerHTML = `
             <label>Por favor, ingrese un nombre de usuario válido.</label>
@@ -284,7 +289,9 @@ Pregunta. ¿cuántas promesas tendremos?
 const fetchGithubUsers = async (usernames) => {
     // creamos un array de promesas de fetch usando map
     const arr_Promises = usernames.map(user => 
-        fetch(`https://api.github.com/users/${user}`)
+        
+        //fetch(`https://api.github.com/users/${user}`)
+        fetch(`./json/${user}.json`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Error: ${response.status}`);
