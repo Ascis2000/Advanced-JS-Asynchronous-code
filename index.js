@@ -278,17 +278,18 @@ document.getElementById('btn_buscarUsuario').addEventListener('click', function(
 
 
 /*
-9.- Dada una lista de usuarios de github guardada en una array,crea una funcion 
+9.- Dada una lista de usuarios de github guardada en una array, crea una funcion 
 fetchGithubUsers(userNames) que utilice 'https://api.github.com/users/${name}' 
 para obtener el nombre de cada usuario.
 Objetivo: Usar Promise.all()
 Recordatorio: Una llamada a fetch() devuelve un objeto promesa.
 Pregunta. ¿cuántas promesas tendremos?
 */
-//async function fetchGithubUsers(usernames) {}
-const fetchGithubUsers = async (usernames) => {
+
+// const fetchGithubUsers = async (usernames) => {
+async function fetchGithubUsers(usernames) {
     // creamos un array de promesas de fetch usando map
-    const arr_Promises = usernames.map(user => 
+    const arr_Promesas = usernames.map(user => 
         
         //fetch(`https://api.github.com/users/${user}`)
         fetch(`./json/${user}.json`)
@@ -300,25 +301,37 @@ const fetchGithubUsers = async (usernames) => {
             })
     );
 
+    const datoss = Promise.all(arr_Promesas).then(users => {
+        console.info("Promise.all -> TODAS las promesas terminadas", users)
+        return users;
+    });
+
+
+
+
+
+
+
+
     // Esperamos a que todas las promesas se resuelvan y devuelve un array 
     // con los datos de los usuarios.
-    try {
+    //try {
         /*
         await: Este operador se usa dentro de funciones async y le dice 
-        al motor de JavaScript que debe esperar a que la promesa se resuelva 
+        a JavaScript que debe esperar a que la promesa se resuelva 
         antes de seguir adelante con la ejecución del código. 
         Si no utilizamos await, el código que sigue se ejecutará inmediatamente, 
         sin esperar el resultado de la promesa.
         */
-        const users = await Promise.all(arr_Promises);
+    /*     const users = await Promise.all(arr_Promesas);
         return users;
     } catch (error) {
         console.error('Error en alguna de las Promesas:', error);
-    }
+    } */
 };
 fetchGithubUsers(['octocat', 'alenriquez96', 'alejandroereyesb'])
     .then(users => {
         console.log("Ejercicio 9");
-        console.log(users);
+        console.log("Usuarios Promise.all=", users);
         console.log("****************");
     });
